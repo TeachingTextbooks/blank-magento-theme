@@ -1,0 +1,113 @@
+<div class="bd-menu-104-popup <?php if ($hasMegamenu && $level === 3): ?>bd-megamenu-popup<?php endif ?>">
+    
+    <?php if ($hasMegamenu && $level === 2): ?>
+        <div class="bd-menu-104 bd-mega-grid  bd-grid-116">
+            <div class="container-fluid">
+                <div class="separated-grid row">
+    <?php else: ?>
+        <ul class=" bd-menu-104">
+    <?php endif ?>
+
+    <?php $_items = $subcategories ?>
+    <?php foreach ($_items as $_subcategory): ?>
+        <?php if ($_helper = Mage::registry('templateHelper')): ?>
+<?php
+    $additionalClass = 'bd-sub-item';
+    if ($hasMegamenu) {
+        if ($level === 2) {
+            $responsive = array(
+                'lg' => empty($itemMegaOption['lg']) ?
+                    Mage::registry('hmenu_mega_grid_item_columns_lg') :
+                    $itemMegaOption['lg'],
+
+                'md' => empty($itemMegaOption['md']) ?
+                    Mage::registry('hmenu_mega_grid_item_columns_md') :
+                    $itemMegaOption['md'],
+
+                'sm' => empty($itemMegaOption['sm']) ?
+                    Mage::registry('hmenu_mega_grid_item_columns_sm') :
+                    $itemMegaOption['sm'],
+
+                'xs' => empty($itemMegaOption['xs']) ?
+                    Mage::registry('hmenu_mega_grid_item_columns_xs') :
+                    $itemMegaOption['xs']
+            );
+
+            $responsiveClasses = '';
+            $lastMode = '';
+
+            foreach ($responsive as $mode => $value) {
+                if (Mage::registry('hmenu_responsive') === $mode) break;
+                $lastMode = $mode;
+                if ($value) {
+                    $responsiveClasses .= ' col-' . $mode . '-' . $value;
+                }
+            }
+
+            if (!$responsiveClasses && $lastMode) {
+                for ($i = $_items->count(); $i <= 12; $i++) {
+                    if ($i && (12 % $i === 0)) {
+                        $responsiveClasses .= ' col-' . $lastMode . '-' . (12 / $i);
+                        break;
+                    }
+                }
+            }
+
+            $additionalClass .= ' bd-mega-item ' . Mage::registry('hmenu_mega_category_item');
+            $additionalClass .= ' separated-item-' . Mage::registry('hmenu_mega_grid_item_id');
+            $additionalClass .= ' ' . $responsiveClasses;
+        } else if ($level === 3) {
+            $additionalClass .= ' bd-mega-item ' . Mage::registry('hmenu_mega_sub_category_item');
+        }
+    }
+?>
+
+    <?php if ($hasMegamenu && $level === 2): ?>
+        <div class=" bd-menuitem-102 <?php echo $additionalClass ?>">
+            <div class="<?php echo Mage::registry('hmenu_mega_grid_item_class') ?> bd-grid-item">
+    <?php else: ?>
+        <li class=" bd-menuitem-102 bd-sub-item <?php echo $additionalClass ?>">
+    <?php endif ?>
+
+    <a class="<?php if ($_helper->categoryIsActive($_subcategory)): ?>active<?php endif ?>"
+        href="<?php echo Mage::helper('catalog/category')->getCategoryUrl($_subcategory) ?>">
+        <span><?php echo $_subcategory->getName() ?></span>
+    </a>
+    <?php
+        $_subcategories = Mage::getModel('catalog/category')->getCollection()
+            ->setStoreId(Mage::app()->getStore()->getId())
+            ->addAttributeToSelect('*')
+            ->addAttributeToFilter('is_active','1')
+            ->addAttributeToFilter('include_in_menu','1')
+            ->addAttributeToFilter('parent_id', array('eq' => $_subcategory->getId()))
+            ->addAttributeToSort('position')
+            ->load();
+    ?>
+    <?php if ($_subcategories->count()): ?>
+        <?php
+            $this->assign('subcategories', $_subcategories)
+                 ->assign('level', $level + 1)
+        ?>
+        <?php echo $this->_toHtml() ?>
+    <?php endif ?>
+
+<?php if ($hasMegamenu && $level === 2): ?>
+        </div>
+    </div>
+<?php else: ?>
+    </li>
+<?php endif ?>
+
+<?php endif ?>
+    <?php endforeach ?>
+
+    <?php if ($hasMegamenu && $level === 2): ?>
+                </div>
+            </div>
+        </div>
+    <?php else: ?>
+        </ul>
+    <?php endif ?>
+
+    
+</div>

@@ -1,0 +1,37 @@
+<?php
+    $data = $this->getTemplatesByType();
+?>
+<div class="entry-edit-head">
+    <h4 class="icon-head head-edit-form fieldset-legend"><?php echo $this->__('Default Templates') ?></h4>
+</div>
+<div class="fieldset bd-customtpl">
+    <div class="hor-scroll">
+        <table cellspacing="0" class="form-list">
+            <tbody>
+            <?php foreach ($data as $type => $templates): ?>
+                <?php if (in_array($type, array('shopping-cart', 'default'))) continue; ?>
+                <tr>
+                    <td class="label"><label for="default-<?php echo $type ?>"><?php echo $type ?></label></td>
+                    <td class="value bd-customtpl-add">
+                        <select id="default-<?php echo $type ?>"
+                                data-source=""
+                                data-type="<?php echo $type ?>"
+                                data-action="select"
+                                data-event="change"
+                                class="select bd-customtpl-select">
+                            <?php foreach ($templates as $tpl): ?>
+                                <?php $tpl = new Varien_Object($tpl) ?>
+
+                                <option <?php if ($tpl->getActive()): ?>selected<?php endif ?>
+                                        value="<?php echo $tpl->getId() ?>">
+                                    <?php echo $tpl->getCaption() ?>
+                                </option>
+                            <?php endforeach ?>
+                        </select>
+                    </td>
+                </tr>
+            <?php endforeach ?>
+            </tbody>
+        </table>
+    </div>
+</div>

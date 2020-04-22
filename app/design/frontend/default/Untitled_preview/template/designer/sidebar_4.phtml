@@ -1,0 +1,34 @@
+<?php Mage::unregister('hasSidebarContent') ?>
+<?php Mage::register('hasSidebarContent', null) ?>
+<?php ob_start() ?>
+    <?php
+    if ($_crumbs = Mage::app()->getLayout()->getBlock('breadcrumbs')) {
+        echo $_crumbs->setControlId(1)->toHtml();
+    }
+?>
+<?php
+    $_additionalClasses = '';
+    $_showColumn = true;
+
+    // 
+    $_areaContent = ob_get_clean();
+    $_showColumn &= 0 < strlen(trim(preg_replace('/<!-- empty::begin -->[\s\S]*?<!-- empty::end -->/', '', $_areaContent)));
+
+    $_helper = Mage::registry('templateHelper');
+    $_themlerHelper = $_helper ? $_helper->getThemlerHelper() : null;
+
+    if ($_themlerHelper && $_themlerHelper->isPreview() && !$_showColumn) {
+        $_showColumn = true;
+        $_additionalClasses = 'hidden bd-hidden-sidebar';
+    }
+?>
+<?php if ($_showColumn): ?>
+<aside class="bd-sidebararea-4-column data-control-id-579323 bd-flex-vertical bd-flex-fixed <?php echo $_additionalClasses ?>">
+    <div class="bd-sidebararea-4 bd-flex-wide  bd-margins">
+        
+        <?php echo $_areaContent ?>
+        
+    </div>
+</aside>
+<?php endif ?>
+<?php Mage::unregister('hasSidebarContent') ?>

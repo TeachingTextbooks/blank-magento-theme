@@ -1,0 +1,141 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Billiondigital_Theme>
+            <version>0.4.0</version>
+        </Billiondigital_Theme>
+    </modules>
+    <frontend>
+        <events>
+            <controller_action_predispatch>
+                <observers>
+                    <billiontheme_init_template_helper>
+                        <class>billiontheme/observer</class>
+                        <method>initTemplateHelper</method>
+                    </billiontheme_init_template_helper>
+                </observers>
+            </controller_action_predispatch>
+
+            <cms_page_render>
+                <observers>
+                    <billiontheme_cms_page_template>
+                        <class>billiontheme/observer</class>
+                        <method>applyCmsPageTemplate</method>
+                    </billiontheme_cms_page_template>
+                    <billiontheme_page_templates>
+                        <class>billiontheme/observer</class>
+                        <method>getCustomPageTemplate</method>
+                    </billiontheme_page_templates>
+                </observers>
+            </cms_page_render>
+
+            <controller_action_layout_render_before>
+                <observers>
+                    <billiontheme_messages>
+                        <class>billiontheme/observer</class>
+                        <method>applyMessagesTemplate</method>
+                    </billiontheme_messages>
+
+                    <billiontheme_apply_custom_template>
+                        <class>billiontheme/observer</class>
+                        <method>applyCustomTemplate</method>
+                    </billiontheme_apply_custom_template>
+                </observers>
+            </controller_action_layout_render_before>
+
+            <catalog_controller_product_view>
+                <observers>
+                    <billiontheme_product_template>
+                        <class>billiontheme/observer</class>
+                        <method>getCustomProductTemplate</method>
+                    </billiontheme_product_template>
+                </observers>
+            </catalog_controller_product_view>
+
+            <catalog_controller_category_init_after>
+                <observers>
+                    <billiontheme_category_template>
+                        <class>billiontheme/observer</class>
+                        <method>getCustomCategoryTemplate</method>
+                    </billiontheme_category_template>
+                </observers>
+            </catalog_controller_category_init_after>
+        </events>
+    </frontend>
+    <global>
+        <helpers>
+            <billiontheme>
+                <class>Billiondigital_Theme_Helper</class>
+            </billiontheme>
+            <designer>
+                <!-- temp workaround -->
+                <class>Billiondigital_Theme_Helper</class>
+            </designer>
+        </helpers>
+        <blocks>
+            <billiontheme>
+                <class>Billiondigital_Theme_Block</class>
+            </billiontheme>
+        </blocks>
+        <models>
+            <billiontheme>
+                <class>Billiondigital_Theme_Model</class>
+                <resourceModel>billiontheme_resource</resourceModel>
+            </billiontheme>
+        </models>
+    </global>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <billiontheme after="Mage_Adminhtml">Billiondigital_Theme_Adminhtml</billiontheme>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+        <menu>
+            <billiontheme module="billiontheme">
+                <title>Billion Themes</title>
+                <sort_order>100</sort_order>
+                <action>adminhtml/billiontheme_list</action>
+            </billiontheme>
+        </menu>
+        <acl>
+            <resources>
+                <all>
+                    <title>Allow Everything</title>
+                </all>
+                <admin>
+                    <children>
+                        <billiontheme translate="title" module="billiontheme">
+                            <title>Billion theme</title>
+                            <sort_order>1000</sort_order>
+                            <children>
+                                <index translate="title">
+                                    <title>Billion Theme</title>
+                                </index>
+                            </children>
+                        </billiontheme>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+        <layout>
+            <updates>
+                <billiontheme>
+                    <file>billiontheme.xml</file>
+                </billiontheme>
+            </updates>
+        </layout>
+    </adminhtml>
+    <phpunit>
+        <suite>
+            <modules>
+                <Billiondigital_Theme />
+            </modules>
+        </suite>
+    </phpunit>
+</config>

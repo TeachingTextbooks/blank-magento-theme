@@ -1,0 +1,42 @@
+<div class="entry-edit bd-templates">
+    <img class="bd-ajax-loader" src="<?php echo $this->getSkinUrl('images/rule-ajax-loader.gif') ?>">
+    <?php
+        $defaultBlock = new Mage_Adminhtml_Block_Template();
+        $defaultBlock->setTemplate('billiontheme/settings/template/default.phtml');
+
+        $sourceBlock = new Mage_Adminhtml_Block_Template();
+        $sourceBlock->setTemplate('billiontheme/settings/template/source.phtml')
+            ->setProducts($this->_getProducts())
+            ->setCategories($this->_getCategories())
+            ->setPages($this->_getPages());
+    ?>
+    <script>
+        window.ThemeTemplates = {};
+        window.ThemeTemplates.data = <?php echo json_encode(
+            Mage::helper('billiontheme/template')->getAllTemplatesInfo(Mage::registry('designer_settings_theme'))
+        ) ?>;
+        window.ThemeTemplates.updateAction = '<?php
+            echo $this->getUrl('adminhtml/billiontheme_settings/updateTemplateInfo')
+        ?>';
+        window.ThemeTemplates.formKey = '<?php echo Mage::getSingleton('core/session')->getFormKey() ?>';
+        window.ThemeTemplates.themeName = '<?php echo Mage::registry('designer_settings_theme') ?>';
+    </script>
+
+    <?php $templateData = $this->_getTemplatesByType() ?>
+
+    <?php if (count($templateData)): ?>
+        <?php echo $defaultBlock->setTemplatesByType($templateData)->toHtml() ?>
+
+        <?php foreach ($templateData as $type => $templates): ?>
+            <?php if (!in_array($type, array('page', 'product-overview', 'products'))) continue ?>
+
+            <?php foreach ($templates as $tpl): ?>
+                <?php $tpl = new Varien_Object($tpl) ?>
+                <?php if ($tpl->getIsCustom()): ?>
+                    <?php echo $sourceBlock->setTpl($tpl)->toHtml() ?>
+                <?php endif ?>
+            <?php endforeach ?>
+
+        <?php endforeach ?>
+    <?php endif ?>
+</div>

@@ -1,0 +1,44 @@
+<?php
+    $_links = $this->getLinks();
+    $_count = count($_links);
+    Mage::register('vmenu_levels', 'expand on hover');
+    Mage::register('vmenu_responsive_levels', 'expand on click');
+?>
+
+<?php if ($_count): ?>
+    
+    <div class="data-control-id-3165 bd-vmenu-1" data-responsive-menu="true" data-responsive-levels="expand on click">
+        <div class="data-control-id-97294 bd-block bd-own-margins block-account">
+            <div class="data-control-id-97295 bd-blockheader bd-tagstyles">
+                <h4><?php echo $this->__('My Account'); ?><h4>
+            </div>
+            <div class="data-control-id-97296 bd-blockcontent bd-tagstyles shape-only">
+                
+                <div class="data-control-id-126090 bd-verticalmenu">
+                    <div class="bd-container-inner">
+                        <ul class="data-control-id-126091 bd-menu-52 nav nav-pills">
+                        <?php $_links = $this->getLinks(); ?>
+                        <?php $_index = 1; ?>
+                        <?php foreach ($_links as $_link): ?>
+                            <?php $_last = ($_index++ >= $_count); ?>
+                            <?php $_active = $this->isActive($_link); ?>
+                            <li class="data-control-id-126092 bd-menuitem-46">
+                                <a<?php if ($_active): ?> class="active"<?php endif ?> href="<?php echo $_active ? '#' : $_link->getUrl() ?>">
+                                    <?php echo $_link->getLabel() ?>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
+                        </ul>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+<?php endif ?>
+
+<?php
+    Mage::unregister('vmenu_levels');
+    Mage::unregister('vmenu_responsive_levels');
+?>

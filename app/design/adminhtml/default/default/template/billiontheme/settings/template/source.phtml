@@ -1,0 +1,75 @@
+<?php
+    $tpl = $this->getTpl();
+    $tplType = $tpl->getType();
+    $tplSource = $tpl->getSource();
+
+?>
+<div class="entry-edit-head">
+    <h4 class="icon-head head-edit-form fieldset-legend"><?php echo $tpl->getCaption() ?></h4>
+</div>
+<div class="fieldset bd-customtpl">
+    <div class="hor-scroll">
+        <table cellspacing="0" class="form-list">
+            <tbody>
+                <?php foreach (explode(',', $tplSource) as $source): ?>
+                    <?php
+                        $entities = array();
+                        switch ($source) {
+                            case 'products':
+                                $entities = $this->getProducts();
+                                break;
+                            case 'categories':
+                                $entities = $this->getCategories();
+                                break;
+                            case 'pages':
+                                $entities = $this->getPages();
+                                break;
+                        }
+
+                        $appliedItems = array();
+                    ?>
+                    <?php if ($entities): ?>
+                        <tr>
+                            <td class="label"><label for="source-TODO"><?php echo ucfirst($source) ?></label></td>
+                            <td class="value bd-customtpl-add">
+                                <select id="source-TODO" class="select bd-customtpl-select">
+                                    <option value="">-- Please Select --</option>
+                                    <?php $sourceItems = $tpl->getData($source) ?>
+                                    <?php foreach ($entities as $entity): ?>
+                                        <?php
+                                        if ($sourceItems && in_array($entity->getId(), $sourceItems)) {
+                                            $appliedItems[$entity->getId()] = $entity->getName();
+                                        }
+                                        ?>
+                                        <option value="<?php echo $entity->getId() ?>"><?php echo $entity->getName() ?></option>
+                                    <?php endforeach ?>
+                                </select>
+                                <?php foreach ($appliedItems as $id => $name): ?>
+                                    <div class="bd-customtpl-item">
+                                        <span><?php echo $name ?></span>
+                                        <a title="Remove"
+                                           data-source="<?php echo $source ?>"
+                                           data-type="<?php echo $tplType ?>"
+                                           data-action="remove"
+                                           data-event="click"
+                                           data-item="<?php echo $id ?>"
+                                           data-template="<?php echo $tpl->getId() ?>"
+                                           class="remove" href="#"></a>
+                                    </div>
+                                <?php endforeach ?>
+                            </td>
+                            <td class="value">
+                                <button
+                                    data-source="<?php echo $source ?>"
+                                    data-type="<?php echo $tplType ?>"
+                                    data-action="add"
+                                    data-event="click"
+                                    data-template="<?php echo $tpl->getId() ?>">Add</button>
+                            </td>
+                        </tr>
+                    <?php endif ?>
+                <?php endforeach ?>
+            </tbody>
+        </table>
+    </div>
+</div>

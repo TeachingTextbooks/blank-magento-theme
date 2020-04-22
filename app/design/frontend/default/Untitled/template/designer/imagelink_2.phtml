@@ -1,0 +1,29 @@
+<?php if ($_helper = Mage::registry('templateHelper')): ?>
+    <?php
+        $_logoSrc = Mage::getStoreConfig('design/header/logo_src');
+        $_logoAlt = Mage::getStoreConfig('design/header/logo_alt');
+
+        $_logoUrl = $this->getUrl('');
+
+        $_designerTheme = $_helper->getThemeName();
+        $_designerSrc = $_helper->getConfigValue("designer/settings/$_designerTheme/logo_src", '');
+        $_designerUrl = $_helper->getConfigValue("designer/settings/$_designerTheme/logo_url", '');
+
+        $_logoSrc = $_designerSrc ? $_designerSrc : $_logoSrc;
+        $_logoUrl = $_designerUrl ? $_designerUrl : $_logoUrl;
+        $_logoAlt = $_logoAlt ? $_logoAlt : <<<TIP
+    
+TIP;
+
+        if (substr_count($_logoSrc, 'http://') > 1) {
+            $_logoSrc = preg_replace('/(http:\\/\\/.+)(?=http:\\/\\/)/', '', $_logoSrc);
+        }
+    ?>
+
+    <a class=" bd-logo-2" href="<?php echo $_logoUrl ?>" title="<?php echo $_logoAlt ?>">
+        <img src="<?php if ($_logoSrc && file_exists(Mage::getDesign()->getSkinBaseDir() . DS . $_logoSrc)):
+                echo $this->getSkinUrl($_logoSrc);
+                else: ?><?php echo Mage::registry('templateHelper')->getSkinUrl('images/designer/f5f9e3117af92b76128978d3a1c3f507_logo.png') ?><?php endif ?>"
+            class=" bd-imagestyles" alt="<?php echo $_logoAlt ?>">
+    </a>
+<?php endif ?>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+    
+    <script>
+    var themeHasJQuery = !!window.jQuery;
+</script>
+<?php $_helper = Mage::registry('templateHelper') ?>
+<script src="<?php
+    echo $this->getSkinUrl('jquery.js') . '?version=' . ($_helper ? $_helper->getThemeVersion() : '')
+?>"></script>
+<script>
+    window.designer = {};
+    window._$ = jQuery.noConflict(themeHasJQuery);
+</script>
+    <?php
+    $_helper = Mage::registry('templateHelper');
+    $_preview = Mage::app()->getRequest()->getParam('preview');
+    $_hasBaseCss = file_exists(Mage::getDesign()->getSkinBaseDir() . DS . 'bootstrap.min.css');
+    $_bootstrapCss = $this->getSkinUrl($_preview || !$_hasBaseCss ? 'bootstrap.css' : 'bootstrap.min.css');
+    $_bootstrapJs = $this->getSkinUrl('bootstrap.min.js');
+    $_params = '?version=' . ($_helper ? $_helper->getThemeVersion() : '');
+?>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="<?php echo $_bootstrapCss . $_params ?>" />
+<script src="<?php echo $_bootstrapJs . $_params ?>"></script>
+<!--[if lte IE 9]>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->getSkinUrl('layout.ie.css') ?>" />
+<script src="<?php echo $this->getSkinUrl('layout.ie.js') ?>"></script>
+<![endif]-->
+<script src="<?php echo $this->getSkinUrl('layout.core.js') ?>"></script>
+<?php $_helper = Mage::registry('templateHelper') ?>
+<script src="<?php
+    echo $this->getSkinUrl('CloudZoom.js') . '?version=' . ($_helper ? $_helper->getThemeVersion() : '')
+?>" type="text/javascript"></script>
+    
+    
+    <?php echo $this->getChildHtml("head") ?>
+    <?php
+        $_helper = Mage::registry('templateHelper');
+
+        $_preview = Mage::app()->getRequest()->getParam('preview');
+        $_baseCss = file_exists(Mage::getDesign()->getSkinBaseDir() . DS . 'style.min.css') ? 'style.min.css' : 'style.css';
+
+        $_style = $this->getSkinUrl($_preview ? 'style.preview.php' : $_baseCss);
+        $_script = $this->getSkinUrl('script.js');
+
+        $_version = '?version=' . ($_helper ? $_helper->getThemeVersion() : '');
+        $_style .= $_version;
+        $_script .= $_version;
+
+        if ($_preview) {
+            $_style .= '&template=' . ($_helper ? $_helper->getThemeName() : '');
+        }
+    ?>
+    <link rel="stylesheet" type="text/css" href="<?php echo $_style ?>" />
+    <script src="<?php echo $_script ?>"></script>
+</head>
+<body class="data-control-id-25 bootstrap bd-body-4  bd-pagebackground  bd-margins <?php echo $this->getBodyClass() ?>">
+    <?php echo $this->getChildHtml("after_body_start"); ?>
+    <header class="data-control-id-505501 bd-headerarea-1 bd-margins">
+        <section class="data-control-id-740803 bd-section-3 bd-tagstyles" id="section3" data-section-title="">
+    <div class="bd-container-inner bd-margins clearfix">
+        <div class="data-control-id-576453 bd-layoutbox-3 bd-no-margins clearfix">
+    <div class="bd-container-inner">
+        <?php if ($_helper = Mage::registry('templateHelper')): ?>
+    <?php echo $_helper->createTemplate('imagelink', 2)->toHtml() ?>
+<?php endif ?>
+	
+		<?php if ($_helper = Mage::registry('templateHelper')): ?>
+    <?php echo $_helper->createTemplate('nav/hmenu', '2')->toHtml() ?>
+<?php endif ?>
+    </div>
+</div>
+    </div>
+</section>
+</header>
+	
+		<div class="data-control-id-632495 bd-stretchtobottom-6 bd-stretch-to-bottom" data-control-selector=".bd-contentlayout-4">
+<div class="bd-contentlayout-4  bd-sheetstyles-8 data-control-id-330 bd-no-margins bd-margins" >
+    <div class="bd-container-inner">
+
+        <div class="bd-flex-vertical bd-stretch-inner bd-contentlayout-offset">
+            
+ <?php if ($_helper = Mage::registry('templateHelper')): ?>
+    <?php echo $_helper->createTemplate('sidebar', 4)->toHtml() ?>
+<?php endif ?>
+            <div class="bd-flex-horizontal bd-flex-wide bd-no-margins">
+                
+ <?php if ($_helper = Mage::registry('templateHelper')): ?>
+    <?php echo $_helper->createTemplate('sidebar', 3)->toHtml() ?>
+<?php endif ?>
+                <div class="bd-flex-vertical bd-flex-wide bd-no-margins">
+                    
+
+                    <div class="data-control-id-572816 bd-layoutitemsbox-14 bd-flex-wide bd-no-margins">
+    <div class="data-control-id-853 bd-content-3">
+    <div id="ajax-loader"><img src='<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif')?>'/></div>
+    <?php if ($_globalMessages = Mage::app()->getLayout()->getBlock('global_messages')): ?>
+        <?php echo $_globalMessages->toHtml() ?>
+    <?php endif ?>
+    
+    <?php echo Mage::app()->getLayout()->getBlock('content')->toHtml() ?>
+</div>
+</div>
+
+                    
+                </div>
+                
+            </div>
+            
+        </div>
+
+    </div>
+</div></div>
+	
+		<footer class="data-control-id-505506 bd-footerarea-1 bd-margins">
+        <section class="data-control-id-734089 bd-section-2 bd-tagstyles" id="section2" data-section-title="">
+    <div class="bd-container-inner bd-margins clearfix">
+        <div class="data-control-id-577090 bd-layoutbox-6 bd-no-margins clearfix">
+    <div class="bd-container-inner">
+        <div class="data-control-id-2425 bd-sitemapmenu-1" data-responsive-menu="true">
+    
+    <div class="data-control-id-302926 bd-responsivemenu-18 collapse-button">
+    <div class="bd-container-inner">
+        <div class="">
+            <a  data-toggle="collapse"
+                data-target=".bd-sitemapmenu-1 .collapse-button + .navbar-collapse"
+                href="#" onclick="return false;">
+                    <span></span>
+            </a>
+        </div>
+    </div>
+</div>
+    <div class="navbar-collapse collapse">
+        <?php if (($links = Mage::app()->getLayout()->getBlock('footer_links')) && ($linksContent = $links->toHtml())): ?>
+    <div class="data-control-id-125315 bd-horizontalmenu-2 clearfix">
+        <?php $linksContent = mb_convert_encoding($linksContent, 'HTML-ENTITIES', 'UTF-8') ?>
+        <?php $_dom = new Zend_Dom_Query($linksContent) ?>
+        <?php if (!$_dom->getDocumentErrors()): ?>
+            <div class="bd-container-inner">
+                <?php
+                    // 
+                    // 
+
+                    $_lists = $_dom->query('ul');
+                    $_menu = '';
+
+                    /** @var $_ul DomElement */
+                    foreach ($_lists as $_ul) {
+                        $_ul->setAttribute('class', 'data-control-id-125316 bd-menu-1 nav nav-pills navbar-left');
+                        foreach ($_ul->getElementsByTagName('li') as $_li) {
+                            $_li->setAttribute('class', 'data-control-id-125317 bd-menuitem-1');
+                        }
+                        $_menu .= $_lists->getDocument()->saveXML($_ul, LIBXML_NOEMPTYTAG);
+                    }
+
+                    echo $_menu;
+                ?>
+            </div>
+        <?php endif ?>
+    </div>
+<?php endif ?>
+        
+    </div>
+</div>
+	
+		<div class="data-control-id-2444 bd-footerlinksmenu-1">
+    <?php if ($links = Mage::app()->getLayout()->createBlock('cms/block')->setBlockId('footer_links')->toHtml()): ?>
+    <div class="data-control-id-125393 bd-horizontalmenu-3 clearfix">
+        <?php $links = mb_convert_encoding($links, 'HTML-ENTITIES', 'UTF-8') ?>
+        <?php $_dom = new Zend_Dom_Query($links) ?>
+        <?php if (!$_dom->getDocumentErrors()): ?>
+            <div class="bd-container-inner">
+                <?php
+                    // 
+                    // 
+
+                    $_lists = $_dom->query('ul');
+                    $_menu = '';
+
+                    /** @var $_ul DomElement */
+                    foreach ($_lists as $_ul) {
+                        $_ul->setAttribute('class', 'data-control-id-125394 bd-menu-5 nav nav-pills nav-pills navbar-left');
+                        foreach ($_ul->getElementsByTagName('li') as $_li) {
+                            $_li->setAttribute('class', 'data-control-id-125395 bd-menuitem-5');
+                        }
+                        $_menu .= $_lists->getDocument()->saveXML($_ul, LIBXML_NOEMPTYTAG);
+                    }
+
+                    echo $_menu;
+                ?>
+            </div>
+        <?php endif ?>
+    </div>
+<?php endif ?>
+</div>
+    </div>
+</div>
+	
+		<?php if ($_helper = Mage::registry('templateHelper')): ?>
+    <?php echo $_helper->createTemplate('pagefooter', 1)->toHtml() ?>
+<?php endif ?>
+    </div>
+</section>
+</footer>
+	
+		<div data-smooth-scroll data-animation-time="250" class="data-control-id-303078 bd-smoothscroll-3"><a href="#" class="data-control-id-2459 bd-backtotop-1 ">
+    <span class="bd-icon-58 bd-icon data-control-id-2458"></span>
+</a></div>
+    <?php if ($this->getChild('global_cookie_notice')): ?>
+        <?php echo $this->getChildHtml('global_cookie_notice') ?>
+    <?php endif ?>
+    <?php echo $this->getChildHtml("before_body_end"); ?>
+</body>
+</html>

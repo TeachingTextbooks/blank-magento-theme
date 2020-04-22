@@ -1,0 +1,95 @@
+#marker-start-L2FwcC9tb2R1bGUvVGhlbWUvc2tpbi9hZG1pbmh0bWwvZGVmYXVsdC9kZWZhdWx0L2JpbGxpb250aGVtZS9jc3Mvc3R5bGUuY3Nz.Lw {}
+.theme-list-title h3 {
+  display: inline-block;
+}
+.create-theme {
+  display: inline-block;
+  text-decoration: none;
+  margin-left: 15px;
+  font-size: 16px;
+}
+.theme-item {
+  display: inline-block;
+  padding: 5px;
+}
+.item-view,
+.item-actions {
+  display: table-cell;
+}
+.item-title.active {
+  font-weight: bold;
+  text-decoration: underline;
+}
+.item-image {
+  width: 200px;
+  height: 200px;
+  background: #d9e5ee;
+  border: 1px #333333 dashed;
+}
+.item-image.editable {
+  background: #fcce77;
+  border-style: solid;
+}
+.item-actions {
+  padding: 10px;
+  vertical-align: top;
+}
+.item-actions a {
+  display: block;
+}
+/* custom templates */
+.bd-templates {
+  position: relative;
+}
+.bd-ajax-loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: none;
+  z-index: 999;
+}
+.bd-templates.bd-ajax-disabled {
+  pointer-events: none;
+}
+.bd-templates.bd-ajax-disabled > .bd-ajax-loader {
+  display: inline-block;
+}
+.bd-templates.bd-ajax-disabled > .bd-customtpl {
+  opacity: 0.25;
+}
+.bd-customtpl {
+  transition: opacity 175ms linear;
+}
+.bd-customtpl-item {
+  display: inline-block;
+  position: relative;
+  padding: 1px 0 1px 5px;
+  margin: 5px 3px;
+  -webkit-box-shadow: 0px 0px 2px 0.5px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0px 0px 2px 0.5px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 0px 2px 0.5px rgba(0, 0, 0, 0.25);
+  border-radius: 2px;
+}
+.bd-customtpl-item:hover {
+  -webkit-box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.5);
+}
+.bd-customtpl-item span {
+  vertical-align: middle;
+}
+.bd-customtpl-item .remove {
+  display: inline-block;
+  vertical-align: middle;
+}
+.bd-customtpl-item .remove:before {
+  content: '×';
+  display: inline-block;
+  opacity: .2;
+  vertical-align: middle;
+  font-size: 1.5em;
+}
+.bd-customtpl-item:hover .remove:before {
+  opacity: 1;
+}
+#marker-end-L2FwcC9tb2R1bGUvVGhlbWUvc2tpbi9hZG1pbmh0bWwvZGVmYXVsdC9kZWZhdWx0L2JpbGxpb250aGVtZS9jc3Mvc3R5bGUuY3Nz.Lw {}

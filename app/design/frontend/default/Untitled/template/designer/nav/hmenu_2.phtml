@@ -1,0 +1,189 @@
+<?php if ($_helper = Mage::registry('templateHelper')): ?>
+<?php
+    $_designerTheme = $_helper->getThemeName();
+    $_hmenuView = $_helper->getConfigValue("designer/settings/$_designerTheme/hmenu", '0');
+    $_startId = Mage::app()->getStore()->getRootCategoryId();
+    $_currentCategory = Mage::registry('current_category');
+
+    if (is_object($_currentCategory) && $_currentCategory->getId() !== $_startId && $_hmenuView === '1') {
+        $_startId = $_currentCategory->getId();
+    }
+
+    $_categories = Mage::getModel('catalog/category')->getCollection()
+        ->setStoreId(Mage::app()->getStore()->getId())
+        ->addAttributeToSelect('*')
+        ->addAttributeToFilter('is_active', '1')
+        ->addAttributeToFilter('include_in_menu', '1')
+        ->addAttributeToFilter('parent_id', array('eq' => $_startId))
+        ->addAttributeToSort('position')
+        ->load();
+
+    Mage::register('hmenu_levels', 'expand on hover');
+    Mage::register('hmenu_responsive', 'xs');
+    Mage::register('hmenu_responsive_levels', 'expand on click');
+    Mage::register('hmenu_submenu_id', '2');
+    Mage::register('hmenu_mega_class', '');
+    Mage::register('hmenu_mega_width', 'sheet');
+    Mage::register('hmenu_mega_custom_width', '600');
+    Mage::register('hmenu_mega_category_item', 'bd-menuitem-112');
+    Mage::register('hmenu_mega_sub_category_item', 'bd-menuitem-114');
+    Mage::register('hmenu_mega_grid_item_id', '108');
+    Mage::register('hmenu_mega_grid_item_class', ' bd-griditem-108');
+    Mage::register('hmenu_mega_grid_item_columns_lg', '');
+    Mage::register('hmenu_mega_grid_item_columns_md', '');
+    Mage::register('hmenu_mega_grid_item_columns_sm', '');
+    Mage::register('hmenu_mega_grid_item_columns_xs', '');
+?>
+<?php if (count($_categories)): ?>
+    
+    <nav class=" bd-hmenu-2"  data-responsive-menu="true" data-responsive-levels="expand on click" data-responsive-type="" data-offcanvas-delay="0ms" data-offcanvas-duration="700ms" data-offcanvas-timing-function="ease">
+        
+            <div class=" bd-menuoverlay-46 bd-menu-overlay"></div>
+            <div class=" bd-responsivemenu-2 collapse-button">
+    <div class="bd-container-inner">
+        <div class="bd-menuitem-17 ">
+            <a  data-toggle="collapse"
+                data-target=".bd-hmenu-2 .collapse-button + .navbar-collapse"
+                href="#" onclick="return false;">
+                    <span>Menu</span>
+            </a>
+        </div>
+    </div>
+</div>
+            <div class="navbar-collapse collapse ">
+            <div class=" bd-horizontalmenu-126 clearfix">
+                <div class="bd-container-inner">
+                    
+                    <ul class=" bd-menu-118 nav nav-pills navbar-left">
+    <?php
+        $_helper = Mage::registry('templateHelper');
+
+        $_showHome = $_helper ? $_helper->getConfigValue("designer/settings/$_designerTheme/navigation_home", '') : '';
+        $_homeText = $_helper ? $_helper->getConfigValue("designer/settings/$_designerTheme/navigation_home_text", 'Home') : '';
+        $_megaMenu = $_helper ? json_decode($_helper->getConfigValue("designer/settings/$_designerTheme/megamenu", '[]'), true) : array();
+
+        $_routeName = Mage::app()->getRequest()->getRouteName();
+        $_identifier = Mage::getSingleton('cms/page')->getIdentifier();
+        $_homeActive = $_routeName === 'cms' && $_identifier === Mage::getStoreConfig(Mage_Cms_Helper_Page::XML_PATH_HOME_PAGE);
+    ?>
+    <?php if ($_showHome): ?>
+        <li class=" bd-menuitem-100">
+            <a<?php if ($_homeActive): ?> class="active"<?php endif ?> href="<?php echo Mage::getBaseUrl() ?>">
+                <span><?php echo $this->__($_homeText ? $_homeText : 'Home') ?></span>
+            </a>
+        </li>
+    <?php endif ?>
+    <?php foreach ($_categories as $_category): ?>
+        <?php if (!$_category->getIsActive()) continue ?>
+        <?php if ($_helper = Mage::registry('templateHelper')): ?>
+    <?php
+        $_subcategories = null;
+        $_thirdLevel = null;
+        $_hasMegaMenu = false;
+        $_categoryId = $_category->getId();
+
+        if (Mage::registry('hmenu_levels') !== 'one level' || Mage::registry('hmenu_responsive_levels') !== 'one level') {
+            $_subcategories = Mage::getModel('catalog/category')->getCollection()
+                ->setStoreId(Mage::app()->getStore()->getId())
+                ->addAttributeToSelect('*')
+                ->addAttributeToFilter('is_active','1')
+                ->addAttributeToFilter('include_in_menu','1')
+                ->addAttributeToFilter('parent_id', array('eq' => $_categoryId))
+                ->addAttributeToSort('position')
+                ->load();
+
+            $_thirdLevel = Mage::getModel('catalog/category')->getCollection()
+                ->setStoreId(Mage::app()->getStore()->getId())
+                ->addAttributeToSelect('*')
+                ->addAttributeToFilter('is_active','1')
+                ->addAttributeToFilter('include_in_menu','1')
+                ->addAttributeToFilter('parent_id', array('in' => $_subcategories->getAllIds()));
+        }
+
+        $_hasSubcategories = $_subcategories && $_subcategories->count();
+        $_hasThirdLevel = $_thirdLevel && $_thirdLevel->count();
+
+        $_itemMegaOption = null;
+        if (Mage::registry('hmenu_levels') === 'megamenu') {
+            $_itemMegaOption = empty($_megaMenu[$_categoryId]) ?
+                array(
+                    'status' => Billiondigital_Theme_Model_Settings_Menu::MEGA_AUTO,
+                    'width' => Billiondigital_Theme_Model_Settings_Menu::MEGA_SHEET_WIDTH,
+                    'customWidth' => ''
+                ) :
+                $_megaMenu[$_categoryId];
+
+            switch ((int) $_itemMegaOption['width']) {
+                case Billiondigital_Theme_Model_Settings_Menu::MEGA_DEFAULT_WIDTH:
+                    $_itemMegaOption['width'] = 'default';
+                    break;
+                case Billiondigital_Theme_Model_Settings_Menu::MEGA_SHEET_WIDTH:
+                    $_itemMegaOption['width'] = 'sheet';
+                    break;
+                case Billiondigital_Theme_Model_Settings_Menu::MEGA_CUSTOM_WIDTH:
+                    $_itemMegaOption['width'] = 'custom';
+                    break;
+            }
+
+            $_hasMegamenu = (!count($_megaMenu) ||
+                    (int) $_itemMegaOption['status'] === Billiondigital_Theme_Model_Settings_Menu::MEGA_AUTO) &&
+                $_hasSubcategories &&
+                $_hasThirdLevel;
+        }
+    ?>
+    <li class=" bd-menuitem-100
+            <?php if ($_hasMegamenu) { echo Mage::registry('hmenu_mega_class'); } ?>
+            <?php if ($_hasSubcategories): ?>bd-submenu-icon-only<?php endif ?>"
+        <?php if ($_hasMegamenu): ?>
+            data-mega-width="<?php echo $_itemMegaOption['width'] === 'default' ?
+                Mage::registry('hmenu_mega_width') :
+                $_itemMegaOption['width'] ?>"
+            data-mega-width-value="<?php echo $_itemMegaOption['width'] === 'default' ?
+                Mage::registry('hmenu_mega_custom_width') :
+                $_itemMegaOption['customWidth'] ?>"
+        <?php endif ?>
+        >
+        <a class="<?php if ($_helper->categoryIsActive($_category)): ?>active<?php endif ?>"
+            href="<?php echo Mage::helper('catalog/category')->getCategoryUrl($_category) ?>">
+            <span><?php echo $_category->getName() ?></span>
+        </a>
+        <?php if ($_hasSubcategories): ?>
+            <?php echo $_helper->createTemplate('nav/subhmenu', Mage::registry('hmenu_submenu_id'))
+                               ->assign('subcategories', $_subcategories)
+                               ->assign('level', 2)
+                               ->assign('hasMegamenu', $_hasMegamenu)
+                               ->assign('itemMegaOption', $_itemMegaOption)
+                               ->toHtml() ?>
+        <?php endif ?>
+    </li>
+<?php endif ?>
+    <?php endforeach ?>
+</ul>
+                    
+                </div>
+            </div>
+            <div class="bd-menu-close-icon">
+    <a href="#" class="bd-icon  bd-icon-49"></a>
+</div>
+        
+            </div>
+    </nav>
+    
+<?php endif ?>
+
+<?php
+    Mage::unregister('hmenu_levels');
+    Mage::unregister('hmenu_responsive');
+    Mage::unregister('hmenu_responsive_levels');
+    Mage::unregister('hmenu_submenu_id');
+    Mage::unregister('hmenu_mega_class');
+    Mage::unregister('hmenu_mega_category_item');
+    Mage::unregister('hmenu_mega_sub_category_item');
+    Mage::unregister('hmenu_mega_grid_item_id');
+    Mage::unregister('hmenu_mega_grid_item_class');
+    Mage::unregister('hmenu_mega_grid_item_columns_lg');
+    Mage::unregister('hmenu_mega_grid_item_columns_md');
+    Mage::unregister('hmenu_mega_grid_item_columns_sm');
+    Mage::unregister('hmenu_mega_grid_item_columns_xs');
+?>
+<?php endif ?>
